@@ -1,0 +1,184 @@
+
+Request access to the IT GitLab site where the ConfigGenerator tool repository exists:
+	https://intranet.ftr.com/Self-Service/Form-view?form=GitLab
+
+Frontier IT GitLab:
+	http://git.ftr.com/
+
+ConfigGenerator:
+	http://git.ftr.com/justin.hay/jinja2configgenerator
+
+Today's Demo:
+	http://git.ftr.com/rosborn/demo
+
+
+Git Terminology
+===============
+- Project - overall container
+	- Issues - a ticket of sorts for tracking changes
+- Repository - location where all of the files are stored
+- Branches - a logical copy of the repository that can be tied to issues
+	- master - main branch, should never be modified directly.  typically merge requests 
+	            are submitted to merge a branch into the master after code is tested
+	- individual branch - this is where development can happen on a specific issue
+- Fork - more like a copy of a project - harder to merge
+
+Git Setup
+=========
+Before you can push a commit, you'll need to set some user details:
+	git config --global user.name "Your Name"
+	git config --global user.email "your_email@yourdomain.com"
+
+Verify settings:
+	git config --list
+
+SSH Keys for Git (https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh):
+
+	Start the Git BASH console (Windows):
+
+		- Look for existing SSH keys:
+			ls -al ~/.ssh
+
+			-If a key exists, its files will look something like this:
+			-rw-r--r-- 1 rho603 1049089 3414 Jan 24  2020 id_rsa
+			-rw-r--r-- 1 rho603 1049089  732 Jan 24  2020 id_rsa.pub
+
+		- Generate Your Keys:
+			ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+			Use a passphrase and save it in your password vault.
+
+		- Add your SSH key to the GitLab website:
+			click on your avatar and navigate to Settings->SSH Keys
+			follow the instructions on this page
+
+		- Test the key via your Git BASH console:
+			ssh -T git@git.ftr.com
+
+Git Help
+========
+git --help
+https://try.github.io
+https://www.atlassian.com/git/tutorials
+
+Creating/Cloning a Project
+==========================
+- Start a new local project by changing to the directory you want to monitor and running:
+	git init
+
+	--OR--
+
+- Fetch project from remote repository into local directory:
+	git clone <URL> [localdir] 
+
+
+- See where a local project was cloned from:
+	git remote -v
+
+After cloning/creating a project, you should create a branch for the changes you are working
+on and do your file creation/editing work in the branch.
+
+Branching  
+=========
+Branching allows you to make a copy of the project to work on it independently 
+of the main copy (the master).
+
+- Look at the branches and which one you are in (designated via asterisk):
+	git branch -a
+
+- Make a new branch of the current project:
+	git branch <branchname>
+
+- Change local context to the new branch:
+	git checkout <branchname>
+
+- Shortcut command to create a branch and do a checkout at the same time:
+	git checkout -b <branchname>
+
+- To merge a branch into the current working branch:
+	git merge <branchname>
+
+- After a merge, you want to delete the branch you just merged:
+	git branch -d <branchname>
+
+If changes to the same file exist in both main and a branch when a merge is attempted, the 
+conflict will be detected and will be in the file like a diff report.  Edit the file to your 
+liking for the final merged version and save it, then add/commit the merged file.
+
+
+Tracking Changes and Staging Files
+==================================
+Learning Exercise: After switching context to your branch, create a new file (ex: "NEWFILE")
+
+- Check current project status to see that git knows about new untracked files or other
+  changes by running:
+	git status
+
+- Add new files or modifications to the branch (stage the files for commit).
+	git add <filename>
+	ex: git add NEWFILE
+
+A file named .gitignore may be used to help control which files may be added to a project.  
+  https://git-scm.com/docs/gitignore#_examples
+
+- Remove files from the branch (the file will still exist in your directory, but will
+  be removed from the tracked project)
+	git rm <filename>
+
+- Commit the changes to the branch, which will open an editor where you can enter 
+  commit comments.  This command sets a new baseline for for future comparison.
+	git commit
+
+- A shortcut to bypass the commit comment text editor is to use -m.
+	git commit -m "<commit comment>"
+	Ex: git commit -m "This commit is for a NEWFILE file change"
+
+Learning Exercise: Change the contents of the NEWFILE file.  "git status" will now know
+ the file changed.
+
+- Show the differences since the last commit
+	git diff <filename>
+	ex: git diff NEWFILE
+
+Even if git is already tracking a file, to stage any changes for commit, you must 
+add the changed file(s) again (staging them), OR you can use the following shortcut:
+
+- Shortcut command to stage and commit all files that git is tracking with:
+	git commit -a
+
+- See version history
+	git history
+
+- See old history details
+	git show [commit id]
+
+- Show local changes:
+	git log
+
+- Push changes to the remote repository and commit them there, too.  This pushes your branch
+  to the remote repository, but doesn't merge them with the master.  If you're working on 
+  someone elses project, push your changes, then go to their GitLab website and submit a merge
+  request to them.
+	git push
+
+- Refresh your local copy of the project with the current remote repository version: 
+	git pull
+    git pull origin master
+
+- Merge Changes in remote.  Merge locally committed changes from your branch to the remote master.
+    git merge origin master
+
+Switching remote URLs from HTTPS to SSH to avoid continuous authentication to remote during git push
+====================================================================================================
+List your existing remotes in order to get the name of the remote you want to change.
+$ git remote -v
+> origin  https://github.com/USERNAME/REPOSITORY.git (fetch)
+> origin  https://github.com/USERNAME/REPOSITORY.git (push)
+
+Change your remote's URL from HTTPS to SSH with the git remote set-url command.
+$ git remote set-url origin git@dpoinfwlapv01.corp.pvt:USERNAME/REPOSITORY.git
+
+Verify that the remote URL has changed.
+$ git remote -v
+# Verify new remote URL
+> origin  git@github.com:USERNAME/REPOSITORY.git (fetch)
+> origin  git@github.com:USERNAME/REPOSITORY.git (push)
