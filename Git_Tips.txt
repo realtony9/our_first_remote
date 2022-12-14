@@ -100,6 +100,15 @@ of the main copy (the master).
 - After a merge, you want to delete the branch you just merged:
 	git branch -d <branchname>
 
+- Push new branch to origin - github/GitLab
+	git branch
+	git checkout <branchname>
+	git push origin <branchname>
+
+- Delete Branches
+	git branch -d <branchname>
+	git branch -D <branchname>   (note this is reckless delete regardless pending commit)
+
 If changes to the same file exist in both main and a branch when a merge is attempted, the 
 conflict will be detected and will be in the file like a diff report.  Edit the file to your 
 liking for the final merged version and save it, then add/commit the merged file.
@@ -182,6 +191,9 @@ $ git remote -v
 # Verify new remote URL
 > origin  git@github.com:USERNAME/REPOSITORY.git (fetch)
 > origin  git@github.com:USERNAME/REPOSITORY.git (push)
+
+Add Git Remote
+$ git remote add origin https://github.com/realtony9/branching_out.git
 
 Git Push to Remote
 $ git push origin master
