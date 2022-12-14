@@ -182,3 +182,6 @@ $ git remote -v
 # Verify new remote URL
 > origin  git@github.com:USERNAME/REPOSITORY.git (fetch)
 > origin  git@github.com:USERNAME/REPOSITORY.git (push)
+
+Git Push to Remote
+$ git push origin master
